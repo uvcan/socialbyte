@@ -3,6 +3,13 @@ const app=express();
 const port=8000;
 const expressLayouts=require('express-ejs-layouts');
 const db=require('./config/mongoose');
+const cookieParser=require('cookie-parser');
+
+//Reading through the post request
+app.use(express.urlencoded());
+
+//Use cookie
+app.use(cookieParser());
 
 //Use static file
 app.use(express.static('./assets'));
