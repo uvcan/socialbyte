@@ -7,12 +7,18 @@ module.exports.profile=function(req,res){
 }
 
 module.exports.signIn=function(req ,res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     return res.render('user_sign_in',{
         title:'Sign-In'
     });
 }
 
 module.exports.signUp=function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     return res.render('user_sign_up',{
         title:'Sign-Up'
     })
@@ -33,16 +39,16 @@ module.exports.create=async function(req ,res){
         User.create(req.body);
         return res.redirect('/users/sign-in');
     }
-    console.log('user already present ');
+    
     return res.redirect('back');
 
     }catch(err){
-        if(err){
-            console.log('Error in Sign-up the user ', err);
-        }
+        console.log('Error in Sign-up the user ', err);
     }
 }
 
 module.exports.createSession=function(req,res){
-    //To Do later
+   
+    return res.redirect('/');
+
 }
