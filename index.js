@@ -8,7 +8,7 @@ const cookieParser=require('cookie-parser');
 const passport=require('passport');
 const passportLocal=require('./config/passport-local-strategy');
 const session=require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
+const MongoStore = require('connect-mongo');
 
 const sassMiddleware=require('node-sass-middleware');
 app.use(sassMiddleware({
@@ -51,8 +51,17 @@ app.use(session({
     saveUninitialized: false,
     cookie:{
         maxAge:(1000 * 60 * 100)
-    }
-    
+    },
+    store: new MongoStore ({
+        // mongooseConnection:db,
+        mongoUrl:'mongodb://127.0.0.1:27017/socilaByte_devlopment',
+        //autoRemove:disabled
+    },
+    function(err){
+        if(err){
+            console.log(err || 'Connect mongo set up ok');
+        }
+    })   
 }));
 
 app.use(passport.initialize());
