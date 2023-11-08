@@ -13,7 +13,7 @@ module.exports.home=async function(req,res){
         //  const comments=await Comment.find({});
         {
             return res.render('home', {
-                title: "Social Byte | Home",
+                title: " Home",
                 posts:  posts,
             
             });

@@ -3,7 +3,12 @@ const router=express.Router();
 const passport=require('passport');
 const postController=require('../controllers/post_controller');
 
-router.use('/create',passport.checkAuthenticatedUser,postController.create);
+
+
+router.post('/create',passport.checkAuthenticatedUser,postController.create);
+router.get('/destroy/:id',passport.checkAuthenticatedUser,postController.destroy);
+
+
 
 
 module.exports=router;
