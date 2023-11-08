@@ -4,7 +4,7 @@ const passport=require('passport');
 const commenstController=require('../controllers/comments_controller');
 
 
-router.use('/create',passport.checkAuthenticatedUser,commenstController.create);
-
+router.post('/create',passport.checkAuthenticatedUser,commenstController.create);
+router.get('/destroy/:id',passport.checkAuthenticatedUser,commenstController.destroy);
 
 module.exports=router;
