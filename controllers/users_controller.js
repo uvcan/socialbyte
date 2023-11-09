@@ -11,7 +11,7 @@ module.exports.profile=async function(req,res){
 module.exports.update=async function(req,res){
     if(req.user.id == req.params.id){
         let user=await User.findByIdAndUpdate(req.params.id ,req.body);
-        console.log(user);
+        req.flash('success','Profile updated sucessfully!');
         return res.redirect('back');
     }else{
         return res.status(404).send('Unauthorized');
@@ -41,6 +41,7 @@ module.exports.create=async function(req ,res){
     try{
     //Checking password and confirm password are matching or not 
     if(req.body.password != req.body.Confirm_password){
+        req.flash('success','Password and confirm password not same!');
         return res.redirect('back');
     }
     //Finding the user in the db
@@ -49,23 +50,31 @@ module.exports.create=async function(req ,res){
     //creating the user if the user is already not present in the db
     if(!user){
         User.create(req.body);
+        req.flash('success','Sign Up successfully !');
         return res.redirect('/users/sign-in');
     }
-    
+    req.flash('success','Email already used !');
     return res.redirect('back');
 
     }catch(err){
+        req.flash('error',err);
         console.log('Error in Sign-up the user ', err);
     }
 }
 
 module.exports.createSession=function(req,res){
-   
+    req.flash('success','Logged in successfully !');
     return res.redirect('/');
 
 }
 
 module.exports.destroy=function(req ,res){
-    req.session.destroy();
+    
+    req.logout((err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Logout failed' });
+        }
+    });
+    req.flash('success', 'You have logged out!');
     return res.redirect('/');
 }

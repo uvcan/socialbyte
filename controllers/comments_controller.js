@@ -11,12 +11,13 @@ module.exports.create=async function(req,res){
             });
             post.comments.push(comment);
             await post.save();
+            req.flash('success','Comments published !');
             return res.redirect('/');
             }
         return res.redirect('/');
     }catch(err){
-        console.log('Error in creating comments',err);
-        return res.redirect('/back');
+        req.flash('error',err);
+        return res.redirect('back');
     }
 }
 
@@ -28,12 +29,15 @@ module.exports.destroy=async function(req, res){
             let postId=comment.post;
             await comment.deleteOne();
             Post.findByIdAndUpdate(postId,{$pull:{comment:req.params._id}});
+            req.flash('success','Comments deleted successfully !');
             return res.redirect('back');
         }else{
+            req.flash('success','U are not aothorized to  deleted Comments !');
             return res.redirect('back');
         }
     }catch(err){
-        console.log('Error in deleating Comment', err);
+        req.flash('error',err);
         return res.redirect('back');
+        
     }
 }

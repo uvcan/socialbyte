@@ -7,9 +7,11 @@ module.exports.create=async function(req,res){
             content:req.body.content,
             user:req.user._id
         })
+        req.flash('success','Post published');
         return res.redirect('back');
     }catch(err){
-        console.log('Error in creating a post',err);
+        req.flash('error',err);
+        return res.redirect('back');
     }
 }
 
@@ -24,13 +26,16 @@ module.exports.destroy=async function(req,res){
                  await post.deleteOne();
                  // Delete associated comments
                 await Comment.deleteMany({ post: req.params.id });
+                req.flash('success','Post and associate comments deleted successfully!');
                 return res.redirect('back');
             }else{
+                req.flash('success','Not authorized to delete Post ');
                 return res.redirect('back');
             }  
         }
         return res.redirect('back'); 
     }catch(err){
-        console.log('Erroer in delating the post',err);
+        req.flash('error',err);
+        return res.redirect('back');
     }
 }
