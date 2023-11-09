@@ -1,9 +1,21 @@
 const User = require("../models/user");
 
-module.exports.profile=function(req,res){
+module.exports.profile=async function(req,res){
+    const user= await User.findById(req.params.id);
     return res.render('user_profile',{
-        title:'User Profile'
+        title:'User Profile',
+        profile_user:user
     });
+}
+
+module.exports.update=async function(req,res){
+    if(req.user.id == req.params.id){
+        let user=await User.findByIdAndUpdate(req.params.id ,req.body);
+        console.log(user);
+        return res.redirect('back');
+    }else{
+        return res.status(404).send('Unauthorized');
+    }    
 }
 
 module.exports.signIn=function(req ,res){

@@ -1,5 +1,5 @@
 const Post = require("../models/post");
-const Comment=require('../models/comment');
+const User=require('../models/user');
 module.exports.home=async function(req,res){
     try{
          const posts= await Post.find({})
@@ -9,16 +9,16 @@ module.exports.home=async function(req,res){
             populate:{
                 path:'user'
             }
-         });
-        //  const comments=await Comment.find({});
+         }).exec();
+        const all_users=await User.find({});
         {
             return res.render('home', {
                 title: " Home",
                 posts:  posts,
-            
+                all_users:all_users
             });
         }
     }catch(err){
-        console.log('Erroe in showing a post',err);
+        console.log('Error in showing the home page',err);
     }
 }
