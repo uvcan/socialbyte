@@ -30,6 +30,8 @@ app.use(cookieParser());
 
 //Use static file
 app.use(express.static('./assets'));
+//make the upload path avaliable to the brouser
+app.use('/uploads',express.static(__dirname + '/uploads'));
 
 
 //Use ejs layout

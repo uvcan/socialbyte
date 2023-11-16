@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const fs=require('fs');
+const path=require('path');
 
 module.exports.profile=async function(req,res){
     const user= await User.findById(req.params.id);
@@ -10,9 +12,31 @@ module.exports.profile=async function(req,res){
 
 module.exports.update=async function(req,res){
     if(req.user.id == req.params.id){
-        let user=await User.findByIdAndUpdate(req.params.id ,req.body);
-        req.flash('success','Profile updated sucessfully!');
-        return res.redirect('back');
+        try{
+            let user=await User.findById(req.params.id);
+        User.uploadedAvatar(req,res,function(err){
+            if(err){console.log('Multer error',err);}
+                user.name=req.body.name;
+                user.email=req.body.email;
+
+                if(req.file){
+                    if (fs.existsSync()){
+                        fs.unlinkSync(path.join(__dirname ,'..',user.avatar));
+                    }else{
+                    user.avatar=User.avatarPath +'/'+req.file.filename;
+                    user.save();
+                    }
+                }
+                
+                req.flash('success','Profile updated sucessfully!');
+                return res.redirect('back');
+        });
+       
+        }catch(err){
+            req.flash('error',err);
+            return res.redirect('back');
+        }
+        
     }else{
         return res.status(404).send('Unauthorized');
     }    
