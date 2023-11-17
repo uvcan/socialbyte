@@ -22,7 +22,7 @@ module.exports.destroy=async function(req,res){
        
         const post=await Post.findById(req.params.id);
         if(post){
-            
+            if(post.user==req.params.id){
                  // Delete the post
                 await post.deleteOne();
                  // Delete associated comments
@@ -35,9 +35,10 @@ module.exports.destroy=async function(req,res){
             }else{
                 
                 return res.json(400,{
-                    message:"Not autherized"
+                    message:"Not autherized to delet the post"
                 });
-            }  
+            } 
+        } 
     }catch(err){
         console.log(err);
         return res.json(500,{
