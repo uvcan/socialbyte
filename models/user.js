@@ -24,6 +24,14 @@ const userSchema=new mongoose.Schema({
     timestamps:true
 });
 
+//Not showing password to the users
+userSchema.set('toJSON', {
+    transform: (doc, ret) => {
+      delete ret.password;
+      return ret;
+    }
+  });
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
