@@ -12,16 +12,16 @@ passport.use(new GoogleStrategy({
   async function(accessToken, refreshToken, profile, done) {
         try{
             const user=await User.findOne({ email: profile.emails[0].value})
-            
             if(user){
                 return done(null ,user);
             }else{
                 const newUser=await User.create({
                     name:profile.displayName,
                     email:profile.emails[0].value,
-                    password:crypto.randomBytes(20).toString('hex')
+                    password:crypto.randomBytes(20).toString('hex'),
+                    avatar: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null
                 });
-                
+               
                 return done(null,newUser);
             } 
         }catch(err){
